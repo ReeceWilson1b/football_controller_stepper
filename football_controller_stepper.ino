@@ -67,11 +67,11 @@ void process_kick_states() {
   for (int i = 0; i < 2; i++) {
 
     // Check if we are in the process of kicking
-    if (kickState[i] != 0 && kickSteppers[i].distanceToGo() != 0)
+    if (kickSteppers[i].distanceToGo() != 0)
       kickSteppers[i].run();
 
     // Process next states
-    else if (kickState[i] > 0 && kickSteppers[i].distanceToGo() == 0) {
+    else if (kickSteppers[i].distanceToGo() == 0) {
 
       switch (kickState[i]) {
         // Swinging back
