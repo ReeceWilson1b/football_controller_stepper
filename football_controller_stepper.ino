@@ -3,13 +3,15 @@
 
 #include <AccelStepper.h>
 
-#define SLIDE_STEPPER_COUNT	2
-#define KICK_STEPPER_COUNT	2
+#define STEPPER_COUNT  3
+#define ENABLE_PIN  8
 
-#define ENABLE_PIN		8
+AccelStepper stepperX(AccelStepper::DRIVER, 2, 5);
+AccelStepper stepperY(AccelStepper::DRIVER, 3, 6);
+AccelStepper stepperZ(AccelStepper::DRIVER, 4, 7);
+//AccelStepper stepperA(AccelStepper::DRIVER, 12, 13);
 
-AccelStepper slideSteppers[2];
-AccelStepper kickSteppers[2];
+AccelStepper *steppers[STEPPER_COUNT] = { &stepperX, &stepperY, &stepperZ };     //, &stepperA };
 
 int kickState[2];
 
@@ -21,20 +23,15 @@ void setup() {
   pinMode(ENABLE_PIN, OUTPUT);
   digitalWrite(ENABLE_PIN, LOW);
 
-  // Set up pins
-  slideSteppers[0] = new AccelStepper(1, 2, 5);
-  slideSteppers[1] = new AccelStepper(1, 3, 6);
-  kickSteppers[0] = new AccelStepper(1, 4, 7);
-  kickSteppers[1] = new AccelStepper(1, 12, 13);
-
   // Set speeds and accelerations for all motors
-  for (int i = 0; i < 2; i++) {
-    slideSteppers[i].setMaxSpeed(200);
-    slideSteppers[i].setAcceleration(100);
-
-    kickSteppers[i].setMaxSpeed(200);
-    kickSteppers[i].setAcceleration(100);
+  for (int i = 0; i < STEPPER_COUNT; i++) {
+    steppers[i]->setMaxSpeed(1000);
+    steppers[i]->setAcceleration(500);
+    steppers[i]->moveTo(0);
   }
+
+  //steppers[2]->disableOutputs();
+  //steppers[3]->disableOutputs();
 
   // Init kick states
   kickState[0] = 0;
@@ -46,24 +43,26 @@ void loop() {
   parse_serial();
 
   // Step the motors
-  slideSteppers[0].run();
-  slideSteppers[1].run();
+  if (steppers[0]->distanceToGo() != 0)
+    steppers[0]->run();
+  if (steppers[1]->distanceToGo() != 0)
+    steppers[1]->run();
 
-  process_kick_states();
+  //process_kick_states();
 }
 
 // Kick the ball
-void kick_ball(int rod, int level, int dir) {
+void kick_ball(int motorID, int level, int dir) {
   // Set the kick speed according to the level
-  kickSteppers[rod].setMaxSpeed(500*level);
+  steppers[motorID]->setMaxSpeed(500*level);
 
   // Set up the state with respect to the direction
-  kickState[rod] = 2 * dir;
-  kickSteppers[rod].moveTo(-5 * dir);
+  kickState[motorID] = 2 * dir;
+  steppers[motorID]->moveTo(-5 * dir);
 }
 
 // Process a kick state
-void process_kick_states() {
+/*void process_kick_states() {
   for (int i = 0; i < 2; i++) {
 
     // Check if we are in the process of kicking
@@ -99,7 +98,7 @@ void process_kick_states() {
       }
     }
   }
-}
+}*/
 
 // Shit's hit the fan random movement
 

@@ -1,5 +1,8 @@
 //PAIR_SELECTOR -> 0 = Left two rods, 1 = right two rods
-#define PAIR_SELECTOR 0
+#define PAIR_SELECTOR 1
+
+// The maximum position
+#define TABLE_EDGE 625
 
 void parse_serial() {
   // Bytes read in
@@ -34,20 +37,23 @@ void parse_serial() {
       currentRod -= 2;
       }
 
+      // Change current rod from 0 or 1 to 0 or 2
+      //currentRod *= 2;
+
       // If sliding
       if (opcode == 2) {
         // Get the position as a float between 0 and 1
         receivedPos = (float)(b2 & 0x3F) / 63.0f;
 
-        // Convert that to a number between 0 and 826
-        moveToPos = int(receivedPos * 826.0);
+        // Convert that to a number between 0 and (insert number here)
+        moveToPos = (int)(receivedPos * TABLE_EDGE);
 
-        // Set thye target position
-        slideSteppers[currentRod].moveTo(moveToPos);
+        // Set the target position
+        steppers[currentRod]->moveTo(moveToPos);
         Serial.println("moving to " + String(moveToPos));
       }
       // If kicking
-      else if (opcode == 3) {
+      /*else if (opcode == 3) {
         // Get the direction
         dir = (b2 >> 5) & 0x01;
 
@@ -61,7 +67,7 @@ void parse_serial() {
         // Send the command to kick
         kick_ball(currentRod, level, dir);
         Serial.println("kicking with level " + String(level) + " in direction " + String(dir));
-      }
+      }*/
     }
   }
 }
