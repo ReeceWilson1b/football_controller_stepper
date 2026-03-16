@@ -21,21 +21,26 @@ void setup() {
 
   // Enable the CNC shield
   pinMode(ENABLE_PIN, OUTPUT);
-  digitalWrite(ENABLE_PIN, LOW);
+  digitalWrite(ENABLE_PIN, HIGH);
 
   // Set speeds and accelerations for all motors
   for (int i = 0; i < STEPPER_COUNT; i++) {
     steppers[i]->setMaxSpeed(1000);
-    steppers[i]->setAcceleration(500);
+    steppers[i]->setAcceleration(1000);
     steppers[i]->moveTo(0);
   }
 
   //steppers[2]->disableOutputs();
   //steppers[3]->disableOutputs();
 
+  steppers[0]->disableOutputs();
+  steppers[1]->disableOutputs();
+
   // Init kick states
   kickState[0] = 0;
   kickState[1] = 0;
+  
+  digitalWrite(ENABLE_PIN, LOW);
 }
 
 void loop() {
@@ -44,9 +49,17 @@ void loop() {
 
   // Step the motors
   if (steppers[0]->distanceToGo() != 0)
+  {
+    //steppers[0]->enableOutputs();
     steppers[0]->run();
+    //steppers[0]->disableOutputs();
+  }
   if (steppers[1]->distanceToGo() != 0)
+  {
+    //steppers[1]->enableOutputs();
     steppers[1]->run();
+    //steppers[1]->disableOutputs();
+  }
 
   //process_kick_states();
 }
