@@ -51,9 +51,11 @@ void parse_serial() {
         // Set the target position
         steppers[currentRod]->moveTo(moveToPos);
         Serial.println("moving to " + String(moveToPos));
+
+        steppers[currentRod]->enableOutputs();
       }
       // If kicking
-      /*else if (opcode == 3) {
+      else if (opcode == 3) {
         // Get the direction
         dir = (b2 >> 5) & 0x01;
 
@@ -66,8 +68,8 @@ void parse_serial() {
 
         // Send the command to kick
         kick_ball(currentRod, level, dir);
-        Serial.println("kicking with level " + String(level) + " in direction " + String(dir));
-      }*/
+        Serial.println("kicking rod " + String(currentRod) + " with level " + String(level) + " in direction " + String(dir));
+      }
     }
   }
 }
