@@ -64,7 +64,7 @@ void loop() {
       int playerPosition = (int)((float)(steppers[i]->currentPosition()) * 0.1024);  // 0.1024 = 64/1024
       char outputByte = (char)(playerRod + playerPosition);
 
-      Serial.write(outputByte);
+      //Serial.write(outputByte);
     }
     else
       steppers[i]->disableOutputs();
