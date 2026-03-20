@@ -23,7 +23,7 @@ AccelStepper stepperA(AccelStepper::DRIVER, 12, 13);
 
 AccelStepper *steppers[STEPPER_COUNT] = { &stepperX, &stepperY, &stepperZ, &stepperA };
 
-SoftwareSerial rxSerial(8, 9);
+//SoftwareSerial rxSerial(8, 9);
 
 int kickState[2];
 
@@ -68,7 +68,8 @@ void loop() {
       int playerPosition = (int)((float)(steppers[i]->currentPosition()) * 0.1024);  // 0.1024 = 64/1024
       char outputByte = (char)(playerRod + playerPosition);
 
-      Serial.write(outputByte);
+      if (!Serial.available())
+        Serial.write(outputByte);
     }
     else
       steppers[i]->disableOutputs();
