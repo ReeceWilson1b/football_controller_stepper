@@ -3,6 +3,15 @@
 
 #include <AccelStepper.h>
 
+//PAIR_SELECTOR -> 0 = Left two rods, 1 = right two rods
+#ifdef ARDUINO_LEFT
+  #define PAIR_SELECTOR 0
+#elif defined(ARDUINO_RIGHT)
+  #define PAIR_SELECTOR 1
+#else
+  #error "No Arduino selected"
+#endif
+
 #define STEPPER_COUNT  4
 #define ENABLE_PIN  8
 
@@ -45,21 +54,20 @@ void setup() {
 }
 
 void loop() {
-  // Get the serial input
+  // Get the serial input  
   parse_serial();
 
-  // Step the motors
-  if (steppers[0]->distanceToGo() != 0)
-  {
-    steppers[0]->run();
-  } else {
-    steppers[0]->disableOutputs();
-  }
-  if (steppers[1]->distanceToGo() != 0)
-  {
-    steppers[1]->run();
-  } else {
-    steppers[1]->disableOutputs();
+  for (int i = 0; i < 2; i++) {
+    if (steppers[i]->distanceToGo() != 0) {
+      steppers[i]->run();
+      int playerRod = ((i + (2 * PAIR_SELECTOR)) << 6);
+      int playerPosition = (int)((float)(steppers[i]->currentPosition()) * 0.1024);  // 0.1024 = 64/1024
+      char outputByte = (char)(playerRod + playerPosition);
+
+      Serial.write(outputByte);
+    }
+    else
+      steppers[i]->disableOutputs();
   }
 
   process_kick_states();

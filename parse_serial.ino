@@ -1,8 +1,7 @@
-//PAIR_SELECTOR -> 0 = Left two rods, 1 = right two rods
-#define PAIR_SELECTOR 1
-
 // The maximum position
 #define TABLE_EDGE 625
+
+#define ACK_BYTE  6
 
 void parse_serial() {
   // Bytes read in
@@ -16,6 +15,11 @@ void parse_serial() {
   // For kick steppers
   int level = 0;
   int dir = 0;
+
+  //Serial.println(Serial.available());
+  /*if (Serial.available() > 0) {
+    Serial.println("Serial byte available!");
+  }*/
 
   // Wait until at least two bytes are available
   if (Serial.available() >= 2) {
@@ -53,6 +57,10 @@ void parse_serial() {
         Serial.println("moving to " + String(moveToPos));
 
         steppers[currentRod]->enableOutputs();
+
+        //byte serialOutByte = ((currentRod + (2 * PAIR_SELECTOR)) << 6) + (b2 & 0x3F);
+  
+        //Serial.write(serialOutByte);
       }
       // If kicking
       else if (opcode == 3) {
@@ -72,6 +80,8 @@ void parse_serial() {
       }
     }
   }
+
+  //Serial.write(ACK_BYTE);
 }
 
 
