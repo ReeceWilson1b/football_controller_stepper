@@ -23,7 +23,7 @@ AccelStepper stepperA(AccelStepper::DRIVER, 12, 13);
 
 AccelStepper *steppers[STEPPER_COUNT] = { &stepperX, &stepperY, &stepperZ, &stepperA };
 
-SoftwareSerial rxSerial(2, 3);
+SoftwareSerial rxSerial(8, 9);
 
 int kickState[2];
 
