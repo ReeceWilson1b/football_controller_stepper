@@ -30,7 +30,7 @@ int kickState[2];
 void setup() {
   // Begin writing/reading serial at 9600 baud
   Serial.begin(9600); // USB?
-  rxSerial.begin(9600); // RX wire?
+  //rxSerial.begin(9600); // RX wire?
 
   // Disable the CNC shield
   pinMode(ENABLE_PIN, OUTPUT);
