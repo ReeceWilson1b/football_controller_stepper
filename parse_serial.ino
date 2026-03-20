@@ -22,9 +22,9 @@ void parse_serial() {
   }*/
 
   // Wait until at least two bytes are available
-  if (Serial.available() >= 2) {
-    b1 = Serial.read();
-    b2 = Serial.read();
+  if (rxSerial.available() >= 2) {
+    b1 = rxSerial.read();
+    b2 = rxSerial.read();
 
     // Get the id of the current rod and the command opcode
     int currentRod = (b1 >> 4) & 0x03;

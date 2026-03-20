@@ -2,6 +2,7 @@
 #include <Wire.h>
 
 #include <AccelStepper.h>
+#include <SoftwareSerial.h>
 
 //PAIR_SELECTOR -> 0 = Left two rods, 1 = right two rods
 #ifdef ARDUINO_LEFT
@@ -22,11 +23,14 @@ AccelStepper stepperA(AccelStepper::DRIVER, 12, 13);
 
 AccelStepper *steppers[STEPPER_COUNT] = { &stepperX, &stepperY, &stepperZ, &stepperA };
 
+SoftwareSerial rxSerial(2, 3);
+
 int kickState[2];
 
 void setup() {
   // Begin writing/reading serial at 9600 baud
-  Serial.begin(9600);
+  Serial.begin(9600); // USB?
+  rxSerial.begin(9600); // RX wire?
 
   // Disable the CNC shield
   pinMode(ENABLE_PIN, OUTPUT);
