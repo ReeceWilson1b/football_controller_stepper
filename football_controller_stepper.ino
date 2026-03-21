@@ -23,14 +23,14 @@ AccelStepper stepperA(AccelStepper::DRIVER, 12, 13);
 
 AccelStepper *steppers[STEPPER_COUNT] = { &stepperX, &stepperY, &stepperZ, &stepperA };
 
-//SoftwareSerial rxSerial(8, 9);
+SoftwareSerial rxSerial(A0, A1);
 
 int kickState[2];
 
 void setup() {
   // Begin writing/reading serial at 9600 baud
-  Serial.begin(9600); // USB?
-  //rxSerial.begin(9600); // RX wire?
+  Serial.begin(9600);   // USB output to Pi
+  rxSerial.begin(9600); // RX input from Pi
 
   // Disable the CNC shield
   pinMode(ENABLE_PIN, OUTPUT);
