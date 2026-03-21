@@ -68,6 +68,8 @@ void loop() {
       int playerPosition = (int)((float)(steppers[i]->currentPosition()) * 0.1024);  // 0.1024 = 64/1024
       char outputByte = (char)(playerRod + playerPosition);
 
+      
+
       if (!Serial.available())
         Serial.write(outputByte);
     }
@@ -153,3 +155,29 @@ void loop() {
 
 
  */
+
+
+char *binary_digits[16] = {
+  "0000",
+  "0001",
+  "0010",
+  "0011",
+  "0100",
+  "0101",
+  "0110",
+  "0111",
+  "1000",
+  "1001",
+  "1010",
+  "1011",
+  "1100",
+  "1101",
+  "1110",
+  "1111"
+}
+
+void print_binary_8(char number) {
+  Serial.print(binary_digits[(number & 0xF0) >> 4]);
+  Serial.print(binary_digits[number & 0x0F]);
+  Serial.print("\n");
+}

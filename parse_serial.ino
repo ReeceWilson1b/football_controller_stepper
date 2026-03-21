@@ -30,7 +30,7 @@ void parse_serial() {
     int currentRod = (b1 >> 4) & 0x03;
     byte opcode = (b2 >> 6) & 0x03;
 
-    Serial.println(currentRod);
+    //Serial.println(currentRod);
 
     // Only move if attached to the correct pair of rods
     if (!PAIR_SELECTOR && (currentRod == 0 || currentRod == 1)
@@ -54,7 +54,7 @@ void parse_serial() {
 
         // Set the target position
         steppers[currentRod]->moveTo(moveToPos);
-        Serial.println("moving to " + String(moveToPos));
+        //Serial.println("moving to " + String(moveToPos));
 
         steppers[currentRod]->enableOutputs();
 
@@ -76,7 +76,7 @@ void parse_serial() {
 
         // Send the command to kick
         kick_ball(currentRod, level, dir);
-        Serial.println("kicking rod " + String(currentRod) + " with level " + String(level) + " in direction " + String(dir));
+        //Serial.println("kicking rod " + String(currentRod) + " with level " + String(level) + " in direction " + String(dir));
       }
     }
   }
