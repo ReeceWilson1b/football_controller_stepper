@@ -174,7 +174,7 @@ char *binary_digits[16] = {
   "1101",
   "1110",
   "1111"
-}
+};
 
 void print_binary_8(char number) {
   Serial.print(binary_digits[(number & 0xF0) >> 4]);
