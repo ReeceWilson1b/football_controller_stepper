@@ -54,7 +54,7 @@ void parse_serial() {
 
         // Set the target position
         steppers[currentRod]->moveTo(moveToPos);
-        //Serial.println("moving to " + String(moveToPos));
+        Serial.println("moving to " + String(moveToPos));
 
         steppers[currentRod]->enableOutputs();
 
