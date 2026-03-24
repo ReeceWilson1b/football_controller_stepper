@@ -13,8 +13,8 @@ void parse_serial() {
   int moveToPos = 0;
 
   // For kick steppers
-  int level = 0;
-  int dir = 0;
+  int fast = 0;
+  int angle = 0;
 
   //Serial.println(Serial.available());
   /*if (Serial.available() > 0) {
@@ -64,18 +64,11 @@ void parse_serial() {
       }
       // If kicking
       else if (opcode == 3) {
-        // Get the direction
-        dir = (b2 >> 5) & 0x01;
-
-        // Change 0 ot 1 to -1 or 1
-        if (dir == 0)
-          dir = -1;
-
-        // Get the strength level
-        level = b2 >> 3 & 0x03;
+        fast = (b2 >> 5) & 1;
+        angle = b2 & 31;
 
         // Send the command to kick
-        kick_ball(currentRod, level, dir);
+        kick_ball(currentRod, fast, angle);
         //Serial.println("kicking rod " + String(currentRod) + " with level " + String(level) + " in direction " + String(dir));
       }
     }

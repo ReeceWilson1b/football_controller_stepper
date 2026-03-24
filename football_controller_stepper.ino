@@ -61,43 +61,26 @@ void loop() {
   // Get the serial input  
   parse_serial();
 
-  for (int i = 0; i < 2; i++) {
+  for (int i = 0; i < 4; i++) {
     if (steppers[i]->distanceToGo() != 0) {
       steppers[i]->run();
-      int playerRod = ((i + (2 * PAIR_SELECTOR)) << 6);
-      int playerPosition = (int)((float)(steppers[i]->currentPosition()) * 0.1024);  // 0.1024 = 64/1024
-      char outputByte = (char)(playerRod + playerPosition);
-
-      
-
-      if (!Serial.available())
-        Serial.write(outputByte);
+      //int playerRod = ((i + (2 * PAIR_SELECTOR)) << 6);
+      //int playerPosition = (int)((float)(steppers[i]->currentPosition()) * 0.1024);  // 0.1024 = 64/1024
+      //char outputByte = (char)(playerRod + playerPosition);
     }
     else
       steppers[i]->disableOutputs();
   }
 
-  process_kick_states();
+  //process_kick_states();
 }
 
 // Kick the ball
-void kick_ball(int motorID, int level, int dir) {
-
-  if (kickState[motorID] == 0) {
-
-    kickState[motorID] = 1;
-
-    // motorID is currently 0 or 1, we want it to be 2 or 3
-    motorID += 2;
-  
-    // Set the kick speed according to the level
-    steppers[motorID]->setMaxSpeed(500*level);
-
-    // Set the target to 45 steps
-    steppers[motorID]->moveTo(45);
-
-    steppers[motorID]->enableOutputs();
-  }
+void kick_ball(int motorID, int fast, int angle) {
+  motorID += 2;
+  steppers[motorID]->setMaxSpeed((fast + 1) * 750);
+  steppers[motorID]->moveTo(angle * 10);
+  steppers[motorID]->enableOutputs();
 }
 
 void process_kick_states()
